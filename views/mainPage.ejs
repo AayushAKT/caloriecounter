@@ -55,7 +55,9 @@
   <div class="bg-white overflow-hidden shadow rounded-lg border" id="home">
     <div class="px-4 py-5 sm:px-6">
       <h3 class="text-lg leading-6 font-medium text-gray-900">
-        Hello <%= user.user_name %>!
+        Hello <span id="usermeal">
+          <%= user.user_name %>
+        </span> !
       </h3>
       <p class="mt-1 max-w-2xl text-sm text-gray-500">
         Wishing you a fantastic day and success in your pursuit of fitness!
@@ -101,9 +103,6 @@
       Search Calories
     </h2>
     <form class="max-w-md mx-auto" id="calculateCalories" onsubmit="getData(); return false;">
-      <button type="button" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
-        Search
-      </button>
       <div class="relative">
         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
           <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -122,22 +121,31 @@
       </div>
     </form>
 
-    <div class="flex flex-col align-center p-5">
-      <p class="p-2">
-        <span id="foodItemName" class="text-2xl">Food Item</span>
-      </p>
-      <p class="p-2">Calories: <span id="calorie">0</span>kcal</p>
-      <p class="p-2">Protien: <span id="protein">0</span>g</p>
-      <div class="mx-1">
+    <form action="/meal" method="POST">
+      <div class="flex flex-col align-center p-5">
+        <p class="p-2">
+          <input id="foodItemName" name="meal_name" class="text-2xl" value="Food Item"></input>
+        </p>
+        <!-- <p class="p-2">Calories: <span id="calorie">0</span>kcal</p>
+      <p class="p-2">Protien: <span id="protein">0</span>g</p> -->
+
+        <p class="p-2">Name: <input id="user_name" name="user_name" class="outline-none"></input></p>
+        <p class="p-2">Calories: <input id="calorie" value="0.00" name="calorie"
+            class="w-[3rem] outline-none"></input>kcal</p>
+        <p class="p-2">Protien: <input id="protein" value="0.00" name="protein" class="w-[3rem] outline-none"></input>g
+        </p>
         <div class="mx-1">
-          <button type="button" id="enterDataBtn"
-            class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Enter
-          </button>
+          <div class="mx-1">
+            <button type="submit" id="enterDataBtn"
+              class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+              Enter
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
   </div>
+
   <!-- calorie search section ends here -->
 
   <script src="index.js"></script>
@@ -149,6 +157,8 @@
     let proteinCount = document.querySelector("#protein");
     let foodItemName = document.querySelector("#foodItemName")
     let calorieSearchBtn = document.getElementById("calorieSearchBtn");
+    let usermeal = document.getElementById("usermeal");
+    user_name.value = usermeal.innerHTML;
 
     function getData() {
       var query = input.value;
@@ -165,9 +175,9 @@
             var proteinValue = result.items[0].protein_g;
             console.log('Calories:', caloriesValue);
             console.log('Proteins:', proteinValue);
-            calorieCount.innerHTML = caloriesValue;
-            proteinCount.innerHTML = proteinValue;
-            foodItemName.innerHTML = query;
+            calorieCount.value = caloriesValue;
+            proteinCount.value = proteinValue;
+            foodItemName.value = query;
 
           } else {
             console.error('No items found in the API response');
@@ -183,41 +193,10 @@
       getData();
     });
 
-
-
-
-
-    let enterDataBtn = document.getElementById("enterDataBtn");
-
-    enterDataBtn.addEventListener("click", () => {
-      // Get relevant data
-      let username = "user_name"; // Replace with the actual username logic
-      let calorieCountValue = calorieCount.innerHTML;
-      let proteinCountValue = proteinCount.innerHTML;
-
-      // Send a POST request to the server to insert data into the meal table
-      $.ajax({
-        method: 'POST',
-        url: '/enterMealData',
-        data: {
-          username: username,
-          calorie: calorieCountValue,
-          protein: proteinCountValue
-        },
-        success: function (result) {
-          console.log('Meal data entered successfully:', result);
-          // Optionally, you can update the UI or perform any other actions after successful insertion
-        },
-        error: function ajaxError(jqXHR) {
-          console.error('Error entering meal data: ', jqXHR.responseText);
-          // Optionally, handle errors and update the UI accordingly
-        }
-      });
-    });
-
-
-
+    function preventBack() { window. history. forward(); } setTimeout("preventBack()", 0); window. onunload = function () { null };
   </script>
+
+
 </body>
 
 </html>

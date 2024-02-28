@@ -154,36 +154,25 @@ app.post("/signup", function (req, res) {
 app.get("/login", function (req, res) {
   res.sendFile(__dirname + "/log-inPage.html");
 });
-
 app.get("/home", function (req, res) {
   res.sendFile(__dirname + "/mainPage.ejs");
 });
 
-// Add this route after your existing routes
-app.use(express.json()); // Add this line before defining routes
 
-// Add this route after your existing routes
-app.post("/enterMealData", (req, res) => {
-  const { username, calorie, protein } = req.body;
+app.post("/meal", function (req, res) {
+  // get data from forms and add to the table called user..
+  var user_name = req.body.user_name;
+  var meal_name = req.body.meal_name;
+  var calorie = req.body.calorie;
+  var protein = req.body.protein;
 
-  // Modify the SQL query to insert data into the meal table
-  let query = "INSERT INTO meal (user_name, calorie, protein) VALUES (?, ?, ?);";
-  console.log('SQL Query:', query);
 
-  connection.query(query, [username, calorie, protein], (error, results) => {
-    if (error) {
-      console.error("Error entering meal data:", error);
-      res.status(500).send("Internal Server Error");
-      return;
-    }
-
-    console.log("Meal data entered successfully");
-    res.status(200).send("Meal data entered successfully");
+  connection.query("INSERT INTO meal (user_name, meal_name, calorie, protein, time) VALUES (?, ?, ? , ? , NOW())", [user_name, meal_name, calorie, protein,], function (err, result) {
+    if (err) throw err;
+    console.log("1 record inserted");
+    res.redirect("/home");
   });
 });
-
-
-
 
 app.listen(4000, () => {
   console.log("Connected!");
