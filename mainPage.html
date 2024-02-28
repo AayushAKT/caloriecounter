@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <link rel="shortcut icon" href="images/faivcon.png" type="image/x-icon" />
+
+  <!-- Tailwind CDN link -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>MainPage</title>
+</head>
+
+<body>
+
+    <!-- navbar starts here-->
+
+    <header class="text-gray-600 body-font sticky top-0 bg-white">
+      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
+          <a class="mr-5 hover:text-gray-900 cursor-pointer" href="#home">Home</a>
+          <a class="mr-5 hover:text-gray-900 cursor-pointer" href="#calculateCalories">Calculate Calories</a>
+        </nav>
+        <a class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-gray-900 lg:items-center lg:justify-center mb-4 md:mb-0">
+          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-green-500 rounded-full" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg> -->
+          <img src="images/faivcon.png" alt="image" class="h-7">
+          <span class="ml-3 text-xl">Calorie Tracker</span>
+        </a>
+        <div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
+          <a href="log-inPage.html" class="inline-flex items-center bg-gray-200 border-0 py-1 px-3 focus:outline-none hover: rounded text-base mt-4 md:mt-0">Log-Out
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- navbar ends here -->
+
+  <h1 class="text-center text-4xl mb-10 mt-10 flex align-center justify-center gap-4">
+    <img src="images/me.jpg" class="h-12 inline-flex rounded-full" alt="" />
+    Welcome user!
+  </h1>
+
+  <!-- profile section start -->
+
+  <div class="bg-white overflow-hidden shadow rounded-lg border" id="home">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        Hello  <%= user.user_name %>!
+      </h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-500">
+        Wishing you a fantastic day and success in your pursuit of fitness!
+        Here are your details.
+      </p>
+    </div>
+    <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+      <dl class="sm:divide-y sm:divide-gray-200">
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Username</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= user.user_name %>
+          </dd>
+        </div>
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Age</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= user.Age %>
+          </dd>
+        </div>
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Gender</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= user.Gender %>
+          </dd>
+        </div>
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Weight</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= user.Weight %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+
+  <!-- profile section starts here -->
+
+  <!-- calorie search section starts here  -->
+
+  <div class="border-2 p-2 rounded-lg mt-10">
+    <h2 class="flex align-center justify-center text-2xl font-medium p-3">
+      Search Calories
+    </h2>
+    <form class="max-w-md mx-auto" id="calculateCalories" onsubmit="getData(); return false;">
+      <button type="button" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+        Search
+      </button>
+      <div class="relative">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+          </svg>
+        </div>
+        <input id="searchfooditem"
+          class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:white dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Enter food or dish" required />
+        <button type="button" id="calorieSearchBtn"
+          class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Search
+        </button>
+      </div>
+    </form>
+
+    <div class="flex flex-col align-center p-5">
+      <p class="p-2">
+        <span id="foodItemName" class="text-2xl">Food Item</span>
+      </p>
+      <p class="p-2">Calories: <span id="caloriecount">0</span>kcal</p>
+      <p class="p-2">Protien: <span id="proteincount">0</span>g</p>
+      <div class="mx-1">
+        <button type="button"
+          class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Enter
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- calorie search section ends here -->
+
+  <script src="api.js"></script>
+  <script src="index.js"></script>  
+</body>
+
+</html>

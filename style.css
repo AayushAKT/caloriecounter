@@ -1,0 +1,13 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+
+@media  (min-width:1530px){
+    body{
+        padding:2.5rem;
+    }
+}

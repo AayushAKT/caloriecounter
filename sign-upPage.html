@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/faivcon.png" type="image/x-icon">
+
+    <!-- Tailwind CDN link -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <title>Calorie Tracker Sign-Up</title>
+
+    <style>
+        /* Add your custom styles here if needed */
+    </style>
+</head>
+<body>
+
+    <!-- Sign-up starts here -->
+
+    <section class="bg-white dark:bg-white text-gray-900">
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-black dark:text-black">
+                <img class="w-8 h-8 mr-2" src="images/faivcon.png" alt="logo">
+                Calorie Tracker    
+            </a>
+            <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-white dark:border-gray-700">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-gray-900">
+                        Create your account
+                    </h1>
+                    <form class="space-y-4 md:space-y-6"  action="/signup" method="post">
+                        <div>
+                            <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Username</label>
+                            <input type="text" name="username" class="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="enter username" required="">
+                        </div>
+                        <div>
+                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Password</label>
+                            <input type="password" name="password" id="password" placeholder="••••••••" class="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500" required="">
+                        </div>
+
+                        <div>
+                            <label for="age" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Age</label>
+                            <input type="number" name="age" class="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="enter age" required="">
+                        </div>
+
+                        <div>
+                            <label for="weight" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Weight</label>
+                            <input type="number" name="weight" class="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="enter age" required="">
+                        </div>
+
+                        <div>
+                            <label for="height" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Height</label>
+                            <input type="number" name="height" class="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="enter height" required="">
+                        </div>
+
+                        <div>
+                            <label for="gender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-900">Gender</label>
+                            <input type="text" name="gender" class="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="enter gender" required="">
+                        </div>
+
+                        <!-- Add additional sign-up fields as needed -->
+                        <button type="submit" id="btn" class="w-full grid place-items-center border-2 p-2.5 rounded-xl hover:bg-gray-100">Register</button>
+                        <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                            Already have an account? <a href="log-inPage.html" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Log-in</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sign-up ends here -->
+
+</body>
+</html>
