@@ -17,11 +17,12 @@
 
   <!-- navbar starts here-->
 
-  <header class="text-gray-600 body-font sticky top-0 bg-white">
+  <header class="text-gray-600 body-font sticky top-0 bg-white z-50">
     <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
       <nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
         <a class="mr-5 hover:text-gray-900 cursor-pointer" href="#home">Home</a>
         <a class="mr-5 hover:text-gray-900 cursor-pointer" href="#calculateCalories">Calculate Calories</a>
+        <a class="mr-5 hover:text-gray-900 cursor-pointer" href="#displayTable">Table</a>
       </nav>
       <a
         class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-gray-900 lg:items-center lg:justify-center mb-4 md:mb-0">
@@ -47,7 +48,7 @@
 
   <h1 class="text-center text-4xl mb-10 mt-10 flex align-center justify-center gap-4">
     <img src="images/me.jpg" class="h-12 inline-flex rounded-full" alt="" />
-    Welcome user!
+    Welcome <span style="text-transform: capitalize;"><%= user.user_name %>!</span> 
   </h1>
 
   <!-- profile section starts here -->
@@ -55,7 +56,7 @@
   <div class="bg-white overflow-hidden shadow rounded-lg border" id="home">
     <div class="px-4 py-5 sm:px-6">
       <h3 class="text-lg leading-6 font-medium text-gray-900">
-        Hello <span id="usermeal">
+        Hello <span id="usermeal" style="text-transform: capitalize;">
           <%= user.user_name %>
         </span> !
       </h3>
@@ -69,7 +70,7 @@
         <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Username</dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <%= user.user_name %>
+            <span style="text-transform: capitalize;"><%= user.user_name %></span>
           </dd>
         </div>
         <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -81,13 +82,19 @@
         <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Gender</dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <%= user.Gender %>
+             <span style="text-transform: capitalize;"><%= user.Gender %></span>
           </dd>
         </div>
         <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Weight</dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <%= user.Weight %>
+            <%= user.Weight %> <span>kg</span>
+          </dd>
+        </div>
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Height</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= user.Height %> <span>cm</span>
           </dd>
         </div>
       </dl>
@@ -124,7 +131,7 @@
     <form action="/meal" method="POST">
       <div class="flex flex-col align-center p-5">
         <p class="p-2">
-          <input id="foodItemName" name="meal_name" class="text-2xl" value="Food Item"></input>
+          <input id="foodItemName" name="meal_name" class="text-2xl outline-none" value="Food Item"></input>
         </p>
         <!-- <p class="p-2">Calories: <span id="calorie">0</span>kcal</p>
       <p class="p-2">Protien: <span id="protein">0</span>g</p> -->
@@ -136,7 +143,7 @@
         </p>
         <div class="mx-1">
           <div class="mx-1">
-            <button type="submit" id="enterDataBtn"
+            <button type="submit" id="enterDataBtn" onclick="validateForm()"
               class="text-white end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-500 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
               Enter
             </button>
@@ -145,8 +152,70 @@
       </div>
     </form>
   </div>
-
   <!-- calorie search section ends here -->
+
+  <!-- table starts here -->
+
+  <div class="relative overflow-x-auto border-2 p-2 rounded-lg mt-10">
+
+    <div class="mb-4 w-[10rem]">
+      <label for="datepicker" class="block text-sm font-medium text-gray-700">Select Date:</label>
+      <input id="datepicker" name="selectedDate" type="date" class="mt-1 p-2 border rounded-md w-full">
+      <button type="button" id="fetchDataBtn"
+        class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 mt-2">
+        Fetch Data
+      </button>
+    </div>
+
+    <table id="mealTable" class="w-full text-sm text-left rtl:text-right text-gray-500">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3">
+            Meal Name
+          </th>
+          <th scope="col" class="px-6 py-3">
+            Calorie (kcal)
+          </th>
+          <th scope="col" class="px-6 py-3">
+            Protein (g)
+          </th>
+          <th scope="col" class="px-6 py-3">
+            Time
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (meals && meals.length> 0) { %>
+          <% meals.forEach(meal=> { %>
+            <tr class="bg-white border-b">
+              <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                <%= meal.meal_name %>
+              </td>
+              <td class="px-6 py-4">
+                <%= meal.calorie %>
+              </td>
+              <td class="px-6 py-4">
+                <%= meal.protein %>
+              </td>
+              <td class="px-6 py-4">
+                <%= meal.time%>
+              </td>
+              <td class="px-6 py-4">
+                <%= meal.formattedTime %>
+              </td>
+            </tr>
+            <% }); %>
+              <% } else { %>
+                <tr>
+                  <td colspan="4">No meals found.</td>
+                </tr>
+                <% } %>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- table ends here -->
 
   <script src="index.js"></script>
 
@@ -159,6 +228,23 @@
     let calorieSearchBtn = document.getElementById("calorieSearchBtn");
     let usermeal = document.getElementById("usermeal");
     user_name.value = usermeal.innerHTML;
+    const selectedDate = new Date().toISOString().split('T')[0]; // Example: '2022-03-01'
+
+    function validateForm() {
+      // Get the values from the form
+      var calorie = parseFloat(document.getElementById("calorie").value);
+      var protein = parseFloat(document.getElementById("protein").value);
+
+      // Client-side validation
+      if (calorie <= 0) {
+        // Show an alert
+        alert("Calorie count must be greater than zero.");
+      } else {
+        // If validation passes, you can submit the form or perform other actions
+        document.getElementById("myForm").submit();
+      }
+    }
+
 
     function getData() {
       var query = input.value;
@@ -193,10 +279,62 @@
       getData();
     });
 
-    function preventBack() { window. history. forward(); } setTimeout("preventBack()", 0); window. onunload = function () { null };
+    function preventBack() { window.history.forward(); } setTimeout("preventBack()", 0); window.onunload = function () { null };
+
+    document.addEventListener('DOMContentLoaded', function () {
+  const fetchDataBtn = document.getElementById('fetchDataBtn');
+  const datepicker = document.getElementById('datepicker');
+
+  // Attach the fetchData function to the button click event
+  fetchDataBtn.addEventListener('click', fetchData);
+
+  function fetchData() {
+    // Get the selected date from the date input
+    const selectedDate = datepicker.value;
+
+    // Send an AJAX request to the server with the selected date
+    fetch(`/fetchData?selectedDate=${selectedDate}`)
+      .then(response => response.json())
+      .then(data => {
+        // Update the table with the received data
+        updateTable(data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }
+
+  function updateTable(data) {
+    const tableBody = document.querySelector('#mealTable tbody');
+    tableBody.innerHTML = ''; // Clear existing table content
+
+    if (data && data.length > 0) {
+      data.forEach(meal => {
+        const row = document.createElement('tr');
+        row.classList.add('bg-white', 'border-b');
+
+        const columns = ['meal_name', 'calorie', 'protein', 'time'];
+        columns.forEach(column => {
+          const cell = document.createElement('td');
+          cell.classList.add('px-6', 'py-4', 'whitespace-nowrap');
+          cell.textContent = meal[column];
+          row.appendChild(cell);
+        });
+
+        tableBody.appendChild(row);
+      });
+    } else {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = 4;
+      cell.textContent = 'No meals found.';
+      row.appendChild(cell);
+      tableBody.appendChild(row);
+    }
+  }
+});
+
   </script>
 
-
 </body>
-
 </html>

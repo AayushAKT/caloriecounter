@@ -51,6 +51,39 @@ app.get("/mainPage.html", async (req, res) => {
 });
 
 
+// app.get("/home", (req, res) => {
+//   // Assuming you have a session and the user information is stored in req.session.user
+//   const loggedInUser = req.session.user;
+//   console.log('Logged-in user:', loggedInUser);
+
+//   if (!loggedInUser) {
+//     // Redirect or handle the case where no user is logged in
+//     res.redirect("/login");
+//     return;
+//   }
+
+//   // Modify the SQL query to fetch details only for the logged-in user
+//   let query = "SELECT * FROM users WHERE user_name = ?;";
+//   console.log('SQL Query:', query);
+
+//   connection.query(query, [loggedInUser.user_name], (error, results) => {
+//     if (error) {
+//       console.log(error);
+//       res.send("Internal Server Error");
+//       return;
+//     }
+
+//     try {
+//       // Assuming there should be only one user with the given username
+//       const user = results[0];
+//       res.render("mainPage.ejs", { user });
+//     } catch (error) {
+//       console.error("Error rendering page:", error);
+//       res.send("Internal Server Error");
+//     }
+//   });
+// });
+
 app.get("/home", (req, res) => {
   // Assuming you have a session and the user information is stored in req.session.user
   const loggedInUser = req.session.user;
@@ -76,7 +109,22 @@ app.get("/home", (req, res) => {
     try {
       // Assuming there should be only one user with the given username
       const user = results[0];
-      res.render("mainPage.ejs", { user });
+
+      // Now, fetch meals for the logged-in user
+      let mealsQuery = "SELECT * FROM meal WHERE TRIM(user_name) = ?;";
+      connection.query(mealsQuery, [loggedInUser.user_name], (mealsError, mealsResults) => {
+        if (mealsError) {
+          console.log(mealsError);
+          res.send("Internal Server Error");
+          return;
+        }
+
+        // Assuming 'mealsResults' contains an array of meals
+        const meals = mealsResults;
+
+        // Render the template with both user and meals data
+        res.render("mainPage.ejs", { user, meals });
+      });
     } catch (error) {
       console.error("Error rendering page:", error);
       res.send("Internal Server Error");
@@ -84,6 +132,70 @@ app.get("/home", (req, res) => {
   });
 });
 
+app.get("/fetchData", (req, res) => {
+  const loggedInUser = req.session.user;
+
+  if (!loggedInUser) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  const selectedDate = req.query.selectedDate;
+
+  let mealsQuery = "SELECT * FROM meal WHERE TRIM(user_name) = ? AND DATE(time) = ?;";
+  console.log('SQL Query:', mealsQuery, [loggedInUser.user_name, selectedDate]); // Log the query and parameters
+
+  connection.query(mealsQuery, [loggedInUser.user_name, selectedDate], (mealsError, mealsResults) => {
+    if (mealsError) {
+      console.log('Error executing query:', mealsError);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+
+    // Map the results to format the date and time
+    const formattedMeals = mealsResults.map(meal => {
+      const formattedTime = new Date(meal.time).toLocaleString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        timeZoneName: 'short',
+        timeZone: 'Asia/Kolkata' // Set the specific timezone, replace with your desired timezone
+      });
+
+      return { ...meal, formattedTime };
+    });
+
+    console.log('Query Results:', formattedMeals); // Log the formatted results
+
+    res.json(formattedMeals);
+  });
+});
+
+
+app.get("/api/meals", (req, res) => {
+  const loggedInUser = req.session.user;
+  const selectedDate = req.query.date;
+
+  if (!loggedInUser) {
+    return res.status(401).json({ error: 'User not logged in' });
+  }
+
+  // Modify the SQL query to fetch meals for the logged-in user and selected date
+  const mealsQuery = "SELECT * FROM meal WHERE TRIM(user_name) = ? AND DATE(time) = ?;";
+  connection.query(mealsQuery, [loggedInUser.user_name, selectedDate], (error, mealsResults) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+    const meals = mealsResults;
+    res.json(meals);
+  });
+});
 
 connection.connect(function (error) {
   if (error) throw error;
@@ -159,20 +271,44 @@ app.get("/home", function (req, res) {
 });
 
 
+// app.post("/meal", function (req, res) {
+//   // get data from forms and add to the table called user..
+//   var user_name = req.body.user_name;
+//   var meal_name = req.body.meal_name;
+//   var calorie = req.body.calorie;
+//   var protein = req.body.protein;
+
+
+//   connection.query("INSERT INTO meal (user_name, meal_name, calorie, protein, time) VALUES (?, ?, ? , ? , NOW())", [user_name, meal_name, calorie, protein,], function (err, result) {
+//     if (err) throw err;
+//     console.log("1 record inserted");
+//     res.redirect("/home");
+//   });
+// });
+
 app.post("/meal", function (req, res) {
   // get data from forms and add to the table called user..
   var user_name = req.body.user_name;
   var meal_name = req.body.meal_name;
   var calorie = req.body.calorie;
   var protein = req.body.protein;
+ 
+  if (user_name && meal_name && calorie>0) {
+    connection.query("INSERT INTO meal (user_name, meal_name, calorie, protein, time) VALUES (?, ?, ? , ? , NOW())", [user_name, meal_name, calorie, protein], function (err, result) {
+      if (err) {
+        console.error(err);
+        return res.status(500).send("Internal Server Error");
+      }
 
+      console.log("1 record inserted");
+      res.redirect("/home");
+    });
+  }
 
-  connection.query("INSERT INTO meal (user_name, meal_name, calorie, protein, time) VALUES (?, ?, ? , ? , NOW())", [user_name, meal_name, calorie, protein,], function (err, result) {
-    if (err) throw err;
-    console.log("1 record inserted");
-    res.redirect("/home");
-  });
+  // Insert data into the meal table
+
 });
+
 
 app.listen(4000, () => {
   console.log("Connected!");
