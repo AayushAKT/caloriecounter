@@ -270,6 +270,32 @@ app.get("/home", function (req, res) {
   res.sendFile(__dirname + "/mainPage.ejs");
 });
 
+app.post("/updateDetails", (req, res) => {
+  const loggedInUser = req.session.user;
+  const newWeight = req.body.newWeight;
+  const newHeight = req.body.newHeight;
+
+  if (!loggedInUser) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
+  // Update user details in the database
+  connection.query(
+    "UPDATE users SET Weight = ?, Height = ? WHERE user_name = ?",
+    [newWeight, newHeight, loggedInUser.user_name],
+    (error, results) => {
+      if (error) {
+        console.log('Error updating user details:', error);
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+
+      console.log('User details updated successfully');
+      res.redirect("/home");
+    }
+  );
+});
 
 // app.post("/meal", function (req, res) {
 //   // get data from forms and add to the table called user..

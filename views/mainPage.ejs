@@ -48,7 +48,9 @@
 
   <h1 class="text-center text-4xl mb-10 mt-10 flex align-center justify-center gap-4">
     <img src="images/me.jpg" class="h-12 inline-flex rounded-full" alt="" />
-    Welcome <span style="text-transform: capitalize;"><%= user.user_name %>!</span> 
+    Welcome <span style="text-transform: capitalize;">
+      <%= user.user_name %>!
+    </span>
   </h1>
 
   <!-- profile section starts here -->
@@ -64,13 +66,22 @@
         Wishing you a fantastic day and success in your pursuit of fitness!
         Here are your details.
       </p>
+
+      <!-- Add this button in your profile section -->
+      <button id="updateDetailsBtn"
+        class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 mt-4">
+        Update Details
+      </button>
+
     </div>
     <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
       <dl class="sm:divide-y sm:divide-gray-200">
         <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Username</dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <span style="text-transform: capitalize;"><%= user.user_name %></span>
+            <span style="text-transform: capitalize;">
+              <%= user.user_name %>
+            </span>
           </dd>
         </div>
         <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -82,7 +93,9 @@
         <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
           <dt class="text-sm font-medium text-gray-500">Gender</dt>
           <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-             <span style="text-transform: capitalize;"><%= user.Gender %></span>
+            <span style="text-transform: capitalize;">
+              <%= user.Gender %>
+            </span>
           </dd>
         </div>
         <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -133,13 +146,11 @@
         <p class="p-2">
           <input id="foodItemName" name="meal_name" class="text-2xl outline-none" value="Food Item"></input>
         </p>
-        <!-- <p class="p-2">Calories: <span id="calorie">0</span>kcal</p>
-      <p class="p-2">Protien: <span id="protein">0</span>g</p> -->
-
-        <p class="p-2">Name: <input id="user_name" name="user_name" class="outline-none"></input></p>
-        <p class="p-2">Calories: <input id="calorie" value="0.00" name="calorie"
-            class="w-[3rem] outline-none"></input>kcal</p>
-        <p class="p-2">Protien: <input id="protein" value="0.00" name="protein" class="w-[3rem] outline-none"></input>g
+    
+        <p class="p-2">Name:<input id="user_name" name="user_name" class="outline-none"></input></p>
+        <p class="p-2">Calories(kcal): <input id="calorie" value="0.00" name="calorie"
+            class="w-[3rem] outline-none"></input></p>
+        <p class="p-2">Protien(g): <input id="protein" value="0.00" name="protein" class="w-[3rem] outline-none"></input>
         </p>
         <div class="mx-1">
           <div class="mx-1">
@@ -282,59 +293,87 @@
     function preventBack() { window.history.forward(); } setTimeout("preventBack()", 0); window.onunload = function () { null };
 
     document.addEventListener('DOMContentLoaded', function () {
-  const fetchDataBtn = document.getElementById('fetchDataBtn');
-  const datepicker = document.getElementById('datepicker');
+      const fetchDataBtn = document.getElementById('fetchDataBtn');
+      const datepicker = document.getElementById('datepicker');
 
-  // Attach the fetchData function to the button click event
-  fetchDataBtn.addEventListener('click', fetchData);
+      // Attach the fetchData function to the button click event
+      fetchDataBtn.addEventListener('click', fetchData);
 
-  function fetchData() {
-    // Get the selected date from the date input
-    const selectedDate = datepicker.value;
+      function fetchData() {
+        // Get the selected date from the date input
+        const selectedDate = datepicker.value;
 
-    // Send an AJAX request to the server with the selected date
-    fetch(`/fetchData?selectedDate=${selectedDate}`)
-      .then(response => response.json())
-      .then(data => {
-        // Update the table with the received data
-        updateTable(data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }
+        // Send an AJAX request to the server with the selected date
+        fetch(`/fetchData?selectedDate=${selectedDate}`)
+          .then(response => response.json())
+          .then(data => {
+            // Update the table with the received data
+            updateTable(data);
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+      }
 
-  function updateTable(data) {
-    const tableBody = document.querySelector('#mealTable tbody');
-    tableBody.innerHTML = ''; // Clear existing table content
+      function updateTable(data) {
+        const tableBody = document.querySelector('#mealTable tbody');
+        tableBody.innerHTML = ''; // Clear existing table content
 
-    if (data && data.length > 0) {
-      data.forEach(meal => {
-        const row = document.createElement('tr');
-        row.classList.add('bg-white', 'border-b');
+        if (data && data.length > 0) {
+          data.forEach(meal => {
+            const row = document.createElement('tr');
+            row.classList.add('bg-white', 'border-b');
 
-        const columns = ['meal_name', 'calorie', 'protein', 'time'];
-        columns.forEach(column => {
+            const columns = ['meal_name', 'calorie', 'protein', 'time'];
+            columns.forEach(column => {
+              const cell = document.createElement('td');
+              cell.classList.add('px-6', 'py-4', 'whitespace-nowrap');
+              cell.textContent = meal[column];
+              row.appendChild(cell);
+            });
+
+            tableBody.appendChild(row);
+          });
+        } else {
+          const row = document.createElement('tr');
           const cell = document.createElement('td');
-          cell.classList.add('px-6', 'py-4', 'whitespace-nowrap');
-          cell.textContent = meal[column];
+          cell.colSpan = 4;
+          cell.textContent = 'No meals found.';
           row.appendChild(cell);
-        });
+          tableBody.appendChild(row);
+        }
+      }
+    });
 
-        tableBody.appendChild(row);
-      });
-    } else {
-      const row = document.createElement('tr');
-      const cell = document.createElement('td');
-      cell.colSpan = 4;
-      cell.textContent = 'No meals found.';
-      row.appendChild(cell);
-      tableBody.appendChild(row);
-    }
-  }
+    document.addEventListener('DOMContentLoaded', function () {
+  // ... (Your existing code)
+
+  const updateDetailsBtn = document.getElementById('updateDetailsBtn');
+
+  updateDetailsBtn.addEventListener('click', () => {
+    const newWeight = prompt("Enter new weight:");
+    const newHeight = prompt("Enter new height:");
+
+    // Send an AJAX request to the server to update user details
+    $.ajax({
+      method: 'POST',
+      url: '/updateDetails',
+      data: { newWeight, newHeight },
+      success: function (result) {
+        // Redirect or handle success as needed
+        console.log('User details updated successfully');
+      },
+      error: function (jqXHR) {
+        console.error('Error updating user details:', jqXHR.responseText);
+        // Handle error as needed
+      }
+    });
+  });
 });
+
 
   </script>
 
 </body>
+
 </html>
