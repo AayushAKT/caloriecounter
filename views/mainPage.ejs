@@ -149,8 +149,8 @@
     
         <p class="p-2">Name:<input id="user_name" name="user_name" class="outline-none"></input></p>
         <p class="p-2">Calories(kcal): <input id="calorie" value="0.00" name="calorie"
-            class="w-[3rem] outline-none"></input></p>
-        <p class="p-2">Protien(g): <input id="protein" value="0.00" name="protein" class="w-[3rem] outline-none"></input>
+            class="w-[5rem] outline-none"></input></p>
+        <p class="p-2">Protien(g): <input id="protein" value="0.00" name="protein" class="w-[5rem] outline-none"></input>
         </p>
         <div class="mx-1">
           <div class="mx-1">
@@ -209,10 +209,7 @@
                 <%= meal.protein %>
               </td>
               <td class="px-6 py-4">
-                <%= meal.time%>
-              </td>
-              <td class="px-6 py-4">
-                <%= meal.formattedTime %>
+                <%= new Date(meal.time).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' }) %>
               </td>
             </tr>
             <% }); %>

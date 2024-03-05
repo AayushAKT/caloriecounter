@@ -255,9 +255,17 @@ app.post("/signup", function (req, res) {
   var gender = req.body.gender;
   var age = req.body.age;
 
+  connection.query("INSERT INTO users (user_name, user_pass, Weight, Height, Gender, Age) VALUES (?, ?, ?, ?, ?, ?)", [name, password, weight, height, gender, age], function (err, result) {
+    if (err) {
+      // Check for duplicate entry error
+      if (err.code === 'ER_DUP_ENTRY') {
+        console.log("Duplicate entry error: The username '" + name + "' is already taken.");
+        return res.status(409).send("The username is already taken. Please choose a different one.");
+      } else {
+        throw err;
+      }
+    }
 
-  connection.query("INSERT INTO users (user_name, user_pass, Weight, Height , Gender , Age) VALUES (?, ?, ? , ? , ? , ?)", [name, password, weight, height, gender, age], function (err, result) {
-    if (err) throw err;
     console.log("1 record inserted");
     res.redirect("/login");
   });
