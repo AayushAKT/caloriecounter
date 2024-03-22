@@ -55,6 +55,66 @@
 
   <!-- profile section starts here -->
 
+  <!-- <div class="bg-white overflow-hidden shadow rounded-lg border" id="home">
+    <div class="px-4 py-5 sm:px-6">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        Hello <span id="usermeal" style="text-transform: capitalize;">
+          <%= user.user_name %>
+        </span> !
+      </h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-500">
+        Wishing you a fantastic day and success in your pursuit of fitness!
+        Here are your details.
+      </p>
+
+      Add this button in your profile section -->
+      <!-- <button id="updateDetailsBtn"
+        class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-4 py-2 mt-4">
+        Update Details
+      </button>
+
+    </div>
+    <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+      <dl class="sm:divide-y sm:divide-gray-200">
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Username</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <span style="text-transform: capitalize;">
+              <%= user.user_name %>
+            </span>
+          </dd>
+        </div>
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Age</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= user.Age %>
+          </dd>
+        </div>
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Gender</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <span style="text-transform: capitalize;">
+              <%= user.Gender %>
+            </span>
+          </dd>
+        </div>
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Weight</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= user.Weight %> <span>kg</span>
+          </dd>
+        </div>
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">Height</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <%= user.Height %> <span>cm</span>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div> --> 
+
+
   <div class="bg-white overflow-hidden shadow rounded-lg border" id="home">
     <div class="px-4 py-5 sm:px-6">
       <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -110,9 +170,32 @@
             <%= user.Height %> <span>cm</span>
           </dd>
         </div>
+        <!-- Display BMI Calculation -->
+        <div class="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <dt class="text-sm font-medium text-gray-500">BMI</dt>
+          <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <% 
+              const weight = parseFloat(user.Weight); 
+              const height = parseFloat(user.Height) / 100; // Convert height to meters
+              const bmi = weight / (height * height); // BMI Formula
+              let bmiCategory = '';
+              if (bmi < 18.5) {
+                bmiCategory = 'Underweight';
+              } else if (bmi < 25) {
+                bmiCategory = 'Normal weight';
+              } else if (bmi < 30) {
+                bmiCategory = 'Overweight';
+              } else {
+                bmiCategory = 'Obesity';
+              }
+            %>
+            <%= bmi.toFixed(2) %> <span>(kg/m<sup>2</sup>)</span> - <%= bmiCategory %>
+          </dd>
+        </div>
       </dl>
     </div>
   </div>
+
 
   <!-- profile section ends here -->
 
